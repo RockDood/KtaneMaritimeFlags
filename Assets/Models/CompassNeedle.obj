@@ -1,0 +1,7 @@
+o CompassNeedle
+v -0.3 0 0
+v 0.3 0 0
+v 0 0 -0.7
+vn 0 0.42 0
+g CompassNeedle
+f 1//1 2//1 3//1
