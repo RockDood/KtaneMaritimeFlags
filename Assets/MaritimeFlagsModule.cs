@@ -16,21 +16,22 @@ public class MaritimeFlagsModule : MonoBehaviour
     public KMBombModule Module;
     public KMAudio Audio;
 
-    public Texture[] Flags;
-    public Texture[] Solves;
-    public MeshRenderer FlagDisplay;
+    public Sprite[] Flags;
+    public Sprite[] Solves;
+    public SpriteRenderer FlagDisplay1;
+    public SpriteRenderer FlagDisplay2;
     public KMSelectable Compass;
     public Transform CompassNeedle;
 
-    private readonly Texture[] _letterFlags = new Texture[26];
-    private readonly Texture[] _digitFlags = new Texture[10];
-    private readonly Texture[] _repeaterFlags = new Texture[4];
+    private readonly Sprite[] _letterFlags = new Sprite[26];
+    private readonly Sprite[] _digitFlags = new Sprite[10];
+    private readonly Sprite[] _repeaterFlags = new Sprite[4];
 
     private static int _moduleIdCounter = 1;
     private int _moduleId;
     private Callsign _callsign;
     private int _compassSolution;
-    private Texture[] _flagsOnModule;
+    private Sprite[] _flagsOnModule;
     private int _currentFlagIndex;
     private bool _isSolved;
     private int _curCompass;
@@ -63,7 +64,7 @@ public class MaritimeFlagsModule : MonoBehaviour
 
         _callsign = _callsigns[Rnd.Range(0, _callsigns.Length)];
         var finalBearing = Rnd.Range(0, 360);
-        var flagsOnModule = new List<Texture>();
+        var flagsOnModule = new List<Sprite>();
         for (int i = 0; i < _callsign.Name.Length; i++)
         {
             var pos = i == 0 ? -1 : _callsign.Name.LastIndexOf(_callsign.Name[i], i - 1);
@@ -75,17 +76,17 @@ public class MaritimeFlagsModule : MonoBehaviour
                 flagsOnModule.Add(_letterFlags[_callsign.Name[i] - 'A']);
         }
 
-        var bearingOnModule = ((finalBearing - _callsign.Bearing + 360) % 360).ToString();
-        for (int i = 0; i < bearingOnModule.Length; i++)
+        var bearingOnModule = (finalBearing - _callsign.Bearing + 360) % 360;
+        var bearingOnModuleStr = bearingOnModule.ToString();
+        for (int i = 0; i < bearingOnModuleStr.Length; i++)
         {
-            var pos = i == 0 ? -1 : bearingOnModule.LastIndexOf(bearingOnModule[i], i - 1);
+            var pos = i == 0 ? -1 : bearingOnModuleStr.LastIndexOf(bearingOnModuleStr[i], i - 1);
             if (pos != -1)
                 flagsOnModule.Add(_repeaterFlags[pos]);
             else
-                flagsOnModule.Add(_digitFlags[bearingOnModule[i] - '0']);
+                flagsOnModule.Add(_digitFlags[bearingOnModuleStr[i] - '0']);
         }
 
-        _currentFlagIndex = Rnd.Range(0, flagsOnModule.Count);
         _flagsOnModule = flagsOnModule.ToArray();
         _curCompass = Rnd.Range(0, 16);
         _isSolved = false;
@@ -106,6 +107,7 @@ public class MaritimeFlagsModule : MonoBehaviour
         Debug.LogFormat(@"[Maritime Flags #{0}] Callsign in flags: {1}", _moduleId, _callsign.Name);
         Debug.LogFormat(@"[Maritime Flags #{0}] Bearing in flags: {1}", _moduleId, bearingOnModule);
         Debug.LogFormat(@"[Maritime Flags #{0}] Bearing from callsign: {1}", _moduleId, _callsign.Bearing);
+        Debug.LogFormat(@"[Maritime Flags #{0}] Final bearing: {1}", _moduleId, (bearingOnModule + _callsign.Bearing) % 360);
         Debug.LogFormat(@"[Maritime Flags #{0}] Solution: {1}", _moduleId, _compassDirections[_compassSolution]);
     }
 
@@ -142,8 +144,6 @@ public class MaritimeFlagsModule : MonoBehaviour
             Debug.LogFormat(@"[Maritime Flags #{0}] Module passed.", _moduleId);
             Module.HandlePass();
             _isSolved = true;
-            FlagDisplay.material.mainTexture = Solves[Rnd.Range(0, Solves.Length)];
-            FlagDisplay.transform.localScale = new Vector3(.095f, .095f, .095f);
         }
         else
         {
@@ -154,11 +154,47 @@ public class MaritimeFlagsModule : MonoBehaviour
 
     private IEnumerator ShowFlags()
     {
+        float duration = Rnd.Range(2.0f, 2.2f);
+        float elapsed;
+
+        yield return new WaitForSeconds(Rnd.Range(0, duration));
+        _currentFlagIndex = Rnd.Range(0, _flagsOnModule.Length);
+
+        FlagDisplay1.sprite = null;
+
         while (!_isSolved)
         {
-            FlagDisplay.material.mainTexture = _flagsOnModule[_currentFlagIndex];
+            FlagDisplay2.sprite = _flagsOnModule[_currentFlagIndex];
+            elapsed = 0f;
+            while (elapsed < duration)
+            {
+                var t = (elapsed / duration);
+                FlagDisplay1.transform.localPosition = new Vector3(0f - t * .02f, .01f, 0f - t * .1f);
+                FlagDisplay2.transform.localPosition = new Vector3(.02f - t * .02f, .01f, .1f - t * .1f);
+                yield return null;
+                elapsed += Time.deltaTime;
+            }
+
             _currentFlagIndex = (_currentFlagIndex + 1) % _flagsOnModule.Length;
-            yield return new WaitForSeconds(1.7f);
+            FlagDisplay1.sprite = FlagDisplay2.sprite;
         }
+
+        FlagDisplay2.sprite = Solves[Rnd.Range(0, Solves.Length)];
+        FlagDisplay2.transform.localScale = new Vector3(.01f, .01f, .01f);
+
+        duration *= 2f;
+        elapsed = 0f;
+        while (elapsed < duration)
+        {
+            var t = (elapsed / duration);
+            t = t * (2 - t);
+            FlagDisplay1.transform.localPosition = new Vector3(0f - t * .02f, .01f, 0f - t * .1f);
+            FlagDisplay2.transform.localPosition = new Vector3(.02f - t * .02f, .01f, .1f - t * .1f);
+            yield return null;
+            elapsed += Time.deltaTime;
+        }
+
+        FlagDisplay1.gameObject.SetActive(false);
+        FlagDisplay2.transform.localPosition = new Vector3(0, .01f, 0);
     }
 }
