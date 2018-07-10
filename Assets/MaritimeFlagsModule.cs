@@ -197,4 +197,16 @@ public class MaritimeFlagsModule : MonoBehaviour
         FlagDisplay1.gameObject.SetActive(false);
         FlagDisplay2.transform.localPosition = new Vector3(0, .01f, 0);
     }
+
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"Set the compass with “!{0} N”, “!{0} NNE”, etc.";
+#pragma warning restore 414
+
+    public KMSelectable[] ProcessTwitchCommand(string command)
+    {
+        for (int i = 0; i < _compassDirections.Length; i++)
+            if (_compassDirections[i].Equals(command, StringComparison.InvariantCultureIgnoreCase))
+                return Enumerable.Repeat(Compass, (i - _curCompass + 16) % 16).ToArray();
+        return null;
+    }
 }
