@@ -169,8 +169,8 @@ public class MaritimeFlagsModule : MonoBehaviour
             while (elapsed < duration)
             {
                 var t = (elapsed / duration);
-                FlagDisplay1.transform.localPosition = new Vector3(0f - t * .02f, .01f, 0f - t * .1f);
-                FlagDisplay2.transform.localPosition = new Vector3(.02f - t * .02f, .01f, .1f - t * .1f);
+                FlagDisplay1.transform.localPosition = new Vector3(0f + t * .02f, .01f, 0f + t * .1f);
+                FlagDisplay2.transform.localPosition = new Vector3(-.02f + t * .02f, .01f, -.1f + t * .1f);
                 yield return null;
                 elapsed += Time.deltaTime;
             }
@@ -188,8 +188,8 @@ public class MaritimeFlagsModule : MonoBehaviour
         {
             var t = (elapsed / duration);
             t = t * (2 - t);
-            FlagDisplay1.transform.localPosition = new Vector3(0f - t * .02f, .01f, 0f - t * .1f);
-            FlagDisplay2.transform.localPosition = new Vector3(.02f - t * .02f, .01f, .1f - t * .1f);
+            FlagDisplay1.transform.localPosition = new Vector3(0f + t * .02f, .01f, 0f + t * .1f);
+            FlagDisplay2.transform.localPosition = new Vector3(-.02f + t * .02f, .01f, -.1f + t * .1f);
             yield return null;
             elapsed += Time.deltaTime;
         }
