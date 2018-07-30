@@ -123,7 +123,7 @@ public class MaritimeFlagsModule : MonoBehaviour
     private bool CompassClicked()
     {
         Compass.AddInteractionPunch();
-        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, CompassNeedle);
+        Audio.PlaySoundAtTransform("click", CompassNeedle);
         if (_isSolved)
             return false;
         _curCompass = (_curCompass + 1) % 16;
@@ -144,6 +144,7 @@ public class MaritimeFlagsModule : MonoBehaviour
             Debug.LogFormat(@"[Maritime Flags #{0}] Module passed.", _moduleId);
             Module.HandlePass();
             _isSolved = true;
+            Audio.PlaySoundAtTransform("solvesound", CompassNeedle);
         }
         else
         {
