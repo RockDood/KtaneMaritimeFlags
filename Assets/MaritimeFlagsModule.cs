@@ -207,7 +207,7 @@ public class MaritimeFlagsModule : MonoBehaviour
     {
         for (int i = 0; i < _compassDirections.Length; i++)
             if (_compassDirections[i].Equals(command, StringComparison.InvariantCultureIgnoreCase))
-                return Enumerable.Repeat(Compass, (i - _curCompass + 16) % 16).ToArray();
+                return Enumerable.Repeat(Compass, (i - _curCompass + 15) % 16 + 1).ToArray();
         return null;
     }
 }
