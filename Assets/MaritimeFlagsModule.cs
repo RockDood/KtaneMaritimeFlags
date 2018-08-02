@@ -30,6 +30,7 @@ public class MaritimeFlagsModule : MonoBehaviour
     private static int _moduleIdCounter = 1;
     private int _moduleId;
     private Callsign _callsign;
+    private int _bearingOnModule;
     private int _compassSolution;
     private Sprite[] _flagsOnModule;
     private int _currentFlagIndex;
@@ -76,8 +77,8 @@ public class MaritimeFlagsModule : MonoBehaviour
                 flagsOnModule.Add(_letterFlags[_callsign.Name[i] - 'A']);
         }
 
-        var bearingOnModule = (finalBearing - _callsign.Bearing + 360) % 360;
-        var bearingOnModuleStr = bearingOnModule.ToString();
+        _bearingOnModule = (finalBearing - _callsign.Bearing + 360) % 360;
+        var bearingOnModuleStr = _bearingOnModule.ToString();
         for (int i = 0; i < bearingOnModuleStr.Length; i++)
         {
             var pos = i == 0 ? -1 : bearingOnModuleStr.LastIndexOf(bearingOnModuleStr[i], i - 1);
@@ -105,9 +106,9 @@ public class MaritimeFlagsModule : MonoBehaviour
         Compass.OnInteract = CompassClicked;
 
         Debug.LogFormat(@"[Maritime Flags #{0}] Callsign in flags: {1}", _moduleId, _callsign.Name);
-        Debug.LogFormat(@"[Maritime Flags #{0}] Bearing in flags: {1}", _moduleId, bearingOnModule);
+        Debug.LogFormat(@"[Maritime Flags #{0}] Bearing in flags: {1}", _moduleId, _bearingOnModule);
         Debug.LogFormat(@"[Maritime Flags #{0}] Bearing from callsign: {1}", _moduleId, _callsign.Bearing);
-        Debug.LogFormat(@"[Maritime Flags #{0}] Final bearing: {1}", _moduleId, (bearingOnModule + _callsign.Bearing) % 360);
+        Debug.LogFormat(@"[Maritime Flags #{0}] Final bearing: {1}", _moduleId, (_bearingOnModule + _callsign.Bearing) % 360);
         Debug.LogFormat(@"[Maritime Flags #{0}] Solution: {1}", _moduleId, _compassDirections[_compassSolution]);
     }
 
