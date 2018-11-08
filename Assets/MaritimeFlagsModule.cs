@@ -51,6 +51,8 @@ public class MaritimeFlagsModule : MonoBehaviour
     void Start()
     {
         _moduleId = _moduleIdCounter++;
+        FlagDisplay1.sprite = null;
+        FlagDisplay2.sprite = null;
 
         foreach (var flag in Flags)
         {
@@ -204,11 +206,15 @@ public class MaritimeFlagsModule : MonoBehaviour
     private readonly string TwitchHelpMessage = @"Set the compass with “!{0} N”, “!{0} NNE”, etc.";
 #pragma warning restore 414
 
-    public KMSelectable[] ProcessTwitchCommand(string command)
+    public IEnumerator ProcessTwitchCommand(string command)
     {
         for (int i = 0; i < _compassDirections.Length; i++)
             if (_compassDirections[i].Equals(command, StringComparison.InvariantCultureIgnoreCase))
-                return Enumerable.Repeat(Compass, (i - _curCompass + 15) % 16 + 1).ToArray();
-        return null;
+            {
+                yield return null;
+                yield return Enumerable.Repeat(Compass, (i - _curCompass + 15) % 16 + 1).ToArray();
+                yield return _curCompass == _compassSolution ? "solve" : "strike";
+                yield break;
+            }
     }
 }
