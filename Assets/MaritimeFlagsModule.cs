@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using MaritimeFlags;
 using UnityEngine;
 using Rnd = UnityEngine.Random;
@@ -24,10 +23,6 @@ public class MaritimeFlagsModule : MonoBehaviour
     public Transform CompassNeedle;
     public KMRuleSeedable RuleSeedable;
 
-    private readonly Sprite[] _letterFlags = new Sprite[26];
-    private readonly Sprite[] _digitFlags = new Sprite[10];
-    private readonly Sprite[] _repeaterFlags = new Sprite[4];
-
     private static int _moduleIdCounter = 1;
     private int _moduleId;
     private Callsign _callsign;
@@ -44,6 +39,11 @@ public class MaritimeFlagsModule : MonoBehaviour
     private static readonly string[] _allCallsigns = @"1STMATE;2NDMATE;3RDMATE;ABANDON;ABOXLAW;ABREAST;ADDENDA;ADJUNCT;ADMIRAL;ADVANCE;ADVECTS;AERODYN;AFTRIGS;AGROUND;AIRTANK;ALADDIN;ALLHAIL;ALLIDES;ALLISON;ALMANAC;ALOWCUT;AMMETER;ANCHORS;ANEMONE;ANGLERS;APOSTLE;APPENDS;APPOINT;AQUATIC;ARTICLE;ATHRUST;ATHWART;ATTACKS;AVASTYE;AVOCADO;AWNINGS;AZIMUTH;BABOONS;BACKING;BAILERS;BALANCE;BALLAST;BARQUES;BARRACK;BARSHOT;BARTAUT;BATTLED;BATTLES;BEACHED;BEACONS;BEAMEND;BEAMSEA;BEARING;BEATING;BECALMS;BECKETS;BELAYED;BENEATH;BERMUDA;BETWIXT;BEWPARS;BEWPERS;BILBOES;BINGING;BISCUIT;BLACKEN;BLANKET;BLOOPER;BLOWING;BLUESEA;BOBSTAY;BOILERS;BOLLARD;BOLSTER;BONNETS;BOOMKIN;BOOTTOP;BOTTOMS;BOUNDER;BOWBEAM;BOWLINE;BOXDECK;BOXMARK;BRACING;BRAILED;BREADTH;BREAKER;BRIDGES;BRIGGED;BRINGTO;BRISTOL;BULKEND;BULWARK;BUMBOAT;BUMPERS;BUMPKIN;BUNKERS;BUNTING;BUOYANT;BURDENS;BURTHEN;BUTTOCK;BYBOARD;BYWINDS;CABOOSE;CALKING;CALVING;CAMBERS;CANBUOY;CAPSIZE;CAPSTAN;CAPTAIN;CARAVEL;CAREENS;CARGOES;CARLINE;CARLING;CARLINS;CARRACK;CARRICK;CARRIER;CATBOAT;CATHEAD;CATSKIN;CATSPAW;CATWALK;CELESTE;CERTIFY;CHAFING;CHAINED;CHANNEL;CHARLEY;CHARLIE;CHARTER;CHEARLY;CHEESED;CHIEFLY;CICADAS;CIRCLED;CIRCLES;CITADEL;CLEANED;CLEARED;CLEATED;CLINKER;CLIPPER;CLOSEST;CLOTHES;CLOVERS;COACHED;COACHES;COAMING;COASTAL;COASTED;COCKPIT;COLLIER;COLORED;COLREGS;COMBINE;COMPANY;CONSORT;CONTAIN;CONVENT;CONVOYS;COPPERS;CORDAGE;CORINTH;CORSAIR;COTCHEL;COUNTER;COVERED;CRACKON;CRADLED;CRADLES;CRAFTED;CRANKED;CRANZES;CREEPER;CRESTED;CREWING;CREWMAN;CREWMEN;CRIBBED;CRIMSON;CRINGLE;CROJACK;CROWNED;CRUISED;CRUISER;CUNNING;CURRENT;CUSTOMS;CUTTERS;CUTTING;DAGGERS;DANDIES;DAYMARK;DEADRUN;DEBARKS;DEBUNKS;DECKLOG;DECLINE;DELAYED;DEPARTS;DERRICK;DEVIATE;DINGBAT;DIPPING;DISABLE;DISMAST;DISRATE;DIURNAL;DIVIDER;DOCKING;DODGERS;DOGVANE;DOLDRUM;DOLPHIN;DONKEYS;DOORING;DORADES;DOUBLED;DOUBLES;DOUSERS;DRAFTED;DRAUGHT;DRAWING;DRIFTER;DRIVING;DROGUES;DRYDOCK;DUNNAGE;DUNSELS;EARINGS;EARRING;EASIEST;EASTERN;EBBTIDE;ECHELON;EFFORTS;EMBARGO;EMBARKS;EMBAYED;ENGINES;ENSIGNS;ENTRIES;EQUATOR;EQUINOX;ERRORED;ESCORTS;EYEBOLT;FAIRWAY;FALKUSA;FALLING;FANTAIL;FARDAGE;FASHION;FASTENS;FASTICE;FATHOMS;FCCRULE;FEATHER;FENDERS;FERRIED;FERRIES;FETCHED;FETCHES;FEVERED;FIDDLED;FIDDLES;FIDDLEY;FIGKNOT;FILLING;FINGERS;FIREMAN;FISHERY;FITTING;FIXMAST;FLAGGED;FLAKING;FLANKED;FLARING;FLASHED;FLASHES;FLATTEN;FLATTOP;FLEMISH;FLOATED;FLOORED;FLOTSAM;FLOWERS;FLUSHED;FLYBOAT;FOGHORN;FOLDING;FOLLOWS;FORCING;FOREAFT;FOREBIT;FOREGUY;FORWARD;FOULIES;FOUNDER;FOXTROT;FRACTAL;FRAMING;FRAZILS;FREEING;FREIGHT;FRESHEN;FRIGATE;FRONTED;FULLSEA;FUNNELS;FURLING;FUTTOCK;FUTZING;GADGETS;GAFFRIG;GAFFTOP;GALLEON;GALLERY;GALLEYS;GALLIOT;GAMMONS;GANGWAY;GARBLED;GARNETS;GARTERS;GASKETS;GEARING;GELCOAT;GENERAL;GENNIES;GEORGES;GHOSTED;GIMBALS;GINEBED;GINGERS;GINPOLE;GIRDLES;GIVEWAY;GMTTIME;GOABOUT;GOALOFT;GOBLINE;GOINGTO;GONDOLA;GOSSIPS;GOUNDER;GRAMPUS;GRAPPLE;GRAVING;GRIPIES;GROGGED;GROMMET;GROUNDS;GROWLER;GUDGEON;GUINEAS;GUNDECK;GUNNELS;GUNPORT;GUNWALE;GUSSETS;HALFSEA;HALYARD;HAMMOCK;HAMPERS;HANGARS;HANGING;HARBORS;HARBOUR;HARDENS;HATCHES;HAULERS;HAULING;HAULOUT;HAWSERS;HAWSING;HAZARDS;HEADERS;HEADING;HEADSEA;HEADSUP;HEADWAY;HEAVEIN;HEAVETO;HEAVING;HEELING;HERRING;HIGHSEA;HITCHED;HITCHES;HOGGING;HOISTED;HOLDING;HOLIDAY;HORIZON;HORSING;HOUSING;HUFFLER;HULLING;ICEBERG;INBOARD;INDEXES;INDICES;INDULGE;INFLATE;INIRONS;INLANDS;INSHORE;INSPECT;INSTAYS;INTEROP;INVERTS;INWATER;INWAYOF;ISOBARS;ISOBATH;ISOGONY;JACKIES;JACKTAR;JENNIES;JERQUES;JETSAMS;JETTIES;JIBBERS;JIBSTAY;JIGGERS;JOGGLES;JOLLIES;JULIETS;JURYRIG;KEELSON;KELLETS;KIBBERS;KICKING;KILLICK;KITCHEN;LADDERS;LANYARD;LATERAL;LAYDAYS;LAZARET;LEADING;LEEHELM;LEESIDE;LEEWARD;LIBERTY;LIGHTER;LIZARDS;LOADING;LOCKERS;LOFTING;LOLLING;LOOKOUT;LUBBERS;LUFFING;LUGGERS;LUGSAIL;MAEWEST;MAGENTA;MANAHOY;MANOWAR;MARCONI;MARINER;MARINES;MATELOT;MERCURY;MIZZENS;MONKEYS;MOORING;MOUSING;NARROWS;NATIONS;NETTING;NIPPERS;OFFCAST;OFFCLAW;OFFDECK;OFFICER;OFFPIER;OILSKIN;OLDSALT;ONBOARD;OREBOAT;OUTEAST;OUTHAUL;OUTLINE;OUTLYER;OUTWARD;OUTWEST;PAGEFIT;PAINTED;PAINTER;PANTING;PARCELS;PARLEYS;PARRELS;PASSAGE;PELAGIC;PENDANT;PENNANT;PEPPERS;PICKETS;PILOTED;PINNACE;PINTLES;PIRATES;PIVOTED;PLATING;POINTED;POINTER;POSITED;PRESENT;PREVENT;PRINTED;PURPLES;PURSERS;PURSUED;PUSSERS;QUARTER;QUAYING;QUEBECS;RABBETS;RADARED;RATLINE;RECKONS;REDUCED;REEFERS;REGALIA;REGENTS;REPAIRS;RETRACT;RIGGING;RIPRAPS;ROMPERS;ROOFING;ROWLOCK;RUDDERS;RUFFLES;RUMMAGE;RUNNING;SAGGING;SAILING;SAILORS;SALTIES;SALUTED;SALUTES;SALVORS;SAMPANS;SAMPSON;SCULLED;SCUPPER;SCUTTLE;SEACOCK;SEALING;SEASICK;SEEKERS;SERVING;SEXTANT;SHAKING;SHEATHS;SHELTER;SHIPPED;SHIPRIG;SHROUDS;SICKBAY;SIERRAS;SIGNALS;SILVERS;SKIPPER;SKYLARK;SKYSAIL;SLINGED;SLIPWAY;SNAGGED;SNOTTER;SOUNDER;SPACING;SPANKER;SPHERES;SPLICED;SPLICES;SPONSON;SPONSOR;SPRAYON;SPRINGS;SQUARES;STACKIE;STANDON;STARTER;STATION;STAYING;STEAMER;STEERED;STEEVES;STEPPED;STEWARD;STOPPER;STOVEIN;STOWAGE;STRIKER;STRIKES;STRIPED;STRIPES;SUMMERS;SUNFISH;SWIMMIE;SYSTEMS;TACKING;TACKLED;TACKLES;TAILEND;TANGOES;THEWIND;THWARTS;TILLERS;TIMBERS;TINCLAD;TOEROPE;TOGGLED;TOGGLES;TOMPION;TONNAGE;TOPMAST;TOPSAIL;TORPEDO;TOSSERS;TRADING;TRAFFIC;TRAMPER;TRANSIT;TRANSOM;TRAWLER;TRENAIL;TRENNEL;TRIMMER;TRIPPED;TRIPPER;TROOPER;TRUNNEL;TUGBOAT;TURNTWO;UNIFORM;UNSHIPS;UPBOUND;UPFRONT;UPNORTH;UPRISEN;UPSOUTH;URGENCY;UTCTIME;VARIATE;VBOTTOM;VESSELS;VICTORS;VICTORY;VOICING;VOYAGER;WATERED;WEATHER;WESTERN;WHALERS;WHARVES;WHELKIE;WHISKEY;WHISTLE;WINCHES;WINDAGE;WINTERS;WORKING;WRINKLE;YARDARM;ZOOMOUT"
         .Split(';');
     private static readonly string[] _compassDirections = @"N,NNE,NE,ENE,E,ESE,SE,SSE,S,SSW,SW,WSW,W,WNW,NW,NNW".Split(',');
+
+    private static int _lastGeneratedRuleSeed;
+    private static Sprite[] _lastGeneratedSprites;
+    private static Flag[] _lastGeneratedFlags;
+    private static Callsign[] _lastGeneratedCallsigns;
 
     static T[] newArray<T>(params T[] array)
     {
@@ -115,8 +115,13 @@ public class MaritimeFlagsModule : MonoBehaviour
         return Math.Sqrt(Math.Pow(px - (lx1 + lambda * dirX), 2) + Math.Pow(py - (ly1 + lambda * dirY), 2));
     }
 
-    Sprite generateFlag(FlagDesign design, ColorInfo[] colors, bool cutout = false)
+    Sprite generateFlagSprite(int ix)
     {
+        if (_lastGeneratedSprites[ix] != null)
+            return _lastGeneratedSprites[ix];
+
+        var flag = _lastGeneratedFlags[ix];
+
         const int w = 519;
         const int h = 519;
         const int padding = 16;
@@ -127,7 +132,7 @@ public class MaritimeFlagsModule : MonoBehaviour
             var x = i % w;
             var y = i / w;
 
-            if (design.IsRepeater)
+            if (flag.Design.IsRepeater)
             {
                 const int pp = (h - (h - 2 * padding) * 5 / 8) / 2;
                 // Left frame
@@ -141,9 +146,9 @@ public class MaritimeFlagsModule : MonoBehaviour
                     return Color.black;
                 // Flag body
                 else if (x > padding && 3.2 * (y - pp) > x - padding && -3.2 * (y - h + pp) > x - padding)
-                    return colors[design.GetPixel((x - padding) / (double) (w - 2 * padding), (y - pp) / (double) (h - 2 * padding))].Color;
+                    return flag.Colors[flag.Design.GetPixel((x - padding) / (double) (w - 2 * padding), (y - pp) / (double) (h - 2 * padding))].Color;
             }
-            else if (cutout)
+            else if (flag.Cutout)
             {
                 const int iw = w - 2 * padding;
                 // Top frame
@@ -163,7 +168,7 @@ public class MaritimeFlagsModule : MonoBehaviour
                     return Color.black;
                 // Flag body
                 else if (x > padding && y > padding && y < h - padding && ((x - padding - iw * 3 / 4) < (y - w / 2) / 2 || (x - padding - iw * 3 / 4) < (-y + w / 2) / 2))
-                    return colors[design.GetPixel((x - padding) / (double) (w - 2 * padding), (y - padding) / (double) (h - 2 * padding))].Color;
+                    return flag.Colors[flag.Design.GetPixel((x - padding) / (double) (w - 2 * padding), (y - padding) / (double) (h - 2 * padding))].Color;
             }
             else
             {
@@ -173,12 +178,14 @@ public class MaritimeFlagsModule : MonoBehaviour
                     return Color.black;
                 // Flag body
                 else if (x > padding && x < w - padding && y > padding && y < h - padding)
-                    return colors[design.GetPixel((x - padding) / (double) (w - 2 * padding), (y - padding) / (double) (h - 2 * padding))].Color;
+                    return flag.Colors[flag.Design.GetPixel((x - padding) / (double) (w - 2 * padding), (y - padding) / (double) (h - 2 * padding))].Color;
             }
             return new Color(0, 0, 0, 0);
         }));
         tx.Apply();
-        return Sprite.Create(tx, new Rect(0, 0, w, h), new Vector2(.5f, .5f));
+        Debug.LogFormat(@"<Maritime Flags #{0}> Generated flag sprite for: {1}", _moduleId, ix < 26 ? ((char) ('A' + ix)).ToString() : ix < 36 ? ((char) ('0' + ix - 26)).ToString() : "R" + (ix - 36 + 1));
+        _lastGeneratedSprites[ix] = Sprite.Create(tx, new Rect(0, 0, w, h), new Vector2(.5f, .5f));
+        return _lastGeneratedSprites[ix];
     }
 
     void Start()
@@ -193,112 +200,108 @@ public class MaritimeFlagsModule : MonoBehaviour
         var yellow = _colorGroups[2][0];
         var white = _colorGroups[2][1];
 
-        Callsign[] callsigns;
-
         var rnd = RuleSeedable.GetRNG();
-        if (rnd.Seed == 1)
+        Debug.LogFormat("[Maritime Flags #{0}] Using rule seed: {1}", _moduleId, rnd.Seed);
+
+        if (rnd.Seed != _lastGeneratedRuleSeed || _lastGeneratedFlags == null)
         {
-            _letterFlags[0] = generateFlag(_flagDesigns[1], new[] { white, blue }, cutout: true);
-            _letterFlags[1] = generateFlag(_flagDesigns[0], new[] { red }, cutout: true);
-            _letterFlags[2] = generateFlag(_flagDesigns[10], new[] { blue, white, red });
-            _letterFlags[3] = generateFlag(_flagDesigns[9], new[] { yellow, blue });
-            _letterFlags[4] = generateFlag(_flagDesigns[6], new[] { blue, red });
-            _letterFlags[5] = generateFlag(_flagDesigns[12], new[] { white, red });
-            _letterFlags[6] = generateFlag(_flagDesigns[5], new[] { yellow, blue });
-            _letterFlags[7] = generateFlag(_flagDesigns[1], new[] { white, red });
-            _letterFlags[8] = generateFlag(_flagDesigns[13], new[] { yellow, black });
-            _letterFlags[9] = generateFlag(_flagDesigns[8], new[] { white, blue });
-            _letterFlags[10] = generateFlag(_flagDesigns[1], new[] { yellow, blue });
-            _letterFlags[11] = generateFlag(_flagDesigns[15], new[] { black, yellow });
-            _letterFlags[12] = generateFlag(_flagDesigns[19], new[] { blue, white });
-            _letterFlags[13] = generateFlag(_flagDesigns[18], new[] { white, blue });
-            _letterFlags[14] = generateFlag(_flagDesigns[20], new[] { yellow, red });
-            _letterFlags[15] = generateFlag(_flagDesigns[21], new[] { blue, white });
-            _letterFlags[16] = generateFlag(_flagDesigns[0], new[] { yellow });
-            _letterFlags[17] = generateFlag(_flagDesigns[25], new[] { red, yellow });
-            _letterFlags[18] = generateFlag(_flagDesigns[21], new[] { white, blue });
-            _letterFlags[19] = generateFlag(_flagDesigns[2], new[] { red, white, blue });
-            _letterFlags[20] = generateFlag(_flagDesigns[15], new[] { white, red });
-            _letterFlags[21] = generateFlag(_flagDesigns[19], new[] { white, red });
-            _letterFlags[22] = generateFlag(_flagDesigns[22], new[] { blue, white, red });
-            _letterFlags[23] = generateFlag(_flagDesigns[25], new[] { white, blue });
-            _letterFlags[24] = generateFlag(_flagDesigns[27], new[] { yellow, red });
-            _letterFlags[25] = generateFlag(_flagDesigns[28], new[] { yellow, red, black, blue });
-            _digitFlags[0] = generateFlag(_flagDesigns[33], new[] { white, blue });
-            _digitFlags[1] = generateFlag(_flagDesigns[8], new[] { yellow, red });
-            _digitFlags[2] = generateFlag(_flagDesigns[8], new[] { red, yellow });
-            _digitFlags[3] = generateFlag(_flagDesigns[8], new[] { red, blue });
-            _digitFlags[4] = generateFlag(_flagDesigns[19], new[] { red, white });
-            _digitFlags[5] = generateFlag(_flagDesigns[19], new[] { yellow, blue });
-            _digitFlags[6] = generateFlag(_flagDesigns[26], new[] { white, blue });
-            _digitFlags[7] = generateFlag(_flagDesigns[3], new[] { white, red });
-            _digitFlags[8] = generateFlag(_flagDesigns[3], new[] { blue, yellow });
-            _digitFlags[9] = generateFlag(_flagDesigns[3], new[] { white, blue });
-            _repeaterFlags[0] = generateFlag(_repeaterDesigns[0], new[] { blue, yellow });
-            _repeaterFlags[1] = generateFlag(_repeaterDesigns[1], new[] { blue, white });
-            _repeaterFlags[2] = generateFlag(_repeaterDesigns[2], new[] { white, black });
-            _repeaterFlags[3] = generateFlag(_repeaterDesigns[3], new[] { red, yellow });
-            callsigns = _seed1Callsigns;
-        }
-        else
-        {
-            if (rnd.Seed == 0)
+            _lastGeneratedSprites = new Sprite[40];
+            _lastGeneratedRuleSeed = rnd.Seed;
+
+            if (rnd.Seed == 1)
             {
-                for (var k = 0; k < 2; k++)
+                _lastGeneratedFlags = new Flag[]
                 {
-                    var designs = k == 0 ? _flagDesigns : _repeaterDesigns;
-                    for (var i = 0; i < designs.Length; i++)
-                    {
-                        var colors = new ColorInfo[designs[i].NumColors];
-                        for (var j = 0; j < designs[i].NumColors; j++)
-                        {
-                            var n = (float) (designs[i].NumColors == 1 ? .5 : .8 * j / (designs[i].NumColors - 1) + .1);
-                            colors[j] = new ColorInfo { Color = new Color(n, n, n), Name = "Gray " + n };
-                        }
-                        var flag = generateFlag(designs[i], colors, designs[i].CutoutAllowed);
-                        if (k == 1)
-                            _repeaterFlags[i] = flag;
-                        else if (i < 26)
-                            _letterFlags[i] = flag;
-                        else
-                            _digitFlags[i - 26] = flag;
-                    }
-                }
+                    new Flag(_flagDesigns[1], new[] { white, blue }, cutout: true),
+                    new Flag(_flagDesigns[0], new[] { red }, cutout: true),
+                    new Flag(_flagDesigns[10], new[] { blue, white, red }),
+                    new Flag(_flagDesigns[9], new[] { yellow, blue }),
+                    new Flag(_flagDesigns[6], new[] { blue, red }),
+                    new Flag(_flagDesigns[12], new[] { white, red }),
+                    new Flag(_flagDesigns[5], new[] { yellow, blue }),
+                    new Flag(_flagDesigns[1], new[] { white, red }),
+                    new Flag(_flagDesigns[13], new[] { yellow, black }),
+                    new Flag(_flagDesigns[8], new[] { white, blue }),
+                    new Flag(_flagDesigns[1], new[] { yellow, blue }),
+                    new Flag(_flagDesigns[15], new[] { black, yellow }),
+                    new Flag(_flagDesigns[19], new[] { blue, white }),
+                    new Flag(_flagDesigns[18], new[] { white, blue }),
+                    new Flag(_flagDesigns[20], new[] { yellow, red }),
+                    new Flag(_flagDesigns[21], new[] { blue, white }),
+                    new Flag(_flagDesigns[0], new[] { yellow }),
+                    new Flag(_flagDesigns[25], new[] { red, yellow }),
+                    new Flag(_flagDesigns[21], new[] { white, blue }),
+                    new Flag(_flagDesigns[2], new[] { red, white, blue }),
+                    new Flag(_flagDesigns[15], new[] { white, red }),
+                    new Flag(_flagDesigns[19], new[] { white, red }),
+                    new Flag(_flagDesigns[22], new[] { blue, white, red }),
+                    new Flag(_flagDesigns[25], new[] { white, blue }),
+                    new Flag(_flagDesigns[27], new[] { yellow, red }),
+                    new Flag(_flagDesigns[28], new[] { yellow, red, black, blue }),
+                    new Flag(_flagDesigns[33], new[] { white, blue }),
+                    new Flag(_flagDesigns[8], new[] { yellow, red }),
+                    new Flag(_flagDesigns[8], new[] { red, yellow }),
+                    new Flag(_flagDesigns[8], new[] { red, blue }),
+                    new Flag(_flagDesigns[19], new[] { red, white }),
+                    new Flag(_flagDesigns[19], new[] { yellow, blue }),
+                    new Flag(_flagDesigns[26], new[] { white, blue }),
+                    new Flag(_flagDesigns[3], new[] { white, red }),
+                    new Flag(_flagDesigns[3], new[] { blue, yellow }),
+                    new Flag(_flagDesigns[3], new[] { white, blue }),
+                    new Flag(_repeaterDesigns[0], new[] { blue, yellow }),
+                    new Flag(_repeaterDesigns[1], new[] { blue, white }),
+                    new Flag(_repeaterDesigns[2], new[] { white, black }),
+                    new Flag(_repeaterDesigns[3], new[] { red, yellow })
+                };
+                _lastGeneratedCallsigns = _seed1Callsigns;
             }
             else
             {
-                // Flags for letters and digits
-                var flags = generateFlags(36, _flagDesigns, rnd, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".Select(ch => ch.ToString()).ToArray());
-                for (int i = 0; i < 26; i++)
-                    _letterFlags[i] = flags[i];
-                for (int i = 0; i < 10; i++)
-                    _digitFlags[i] = flags[i + 26];
+                _lastGeneratedFlags = new Flag[40];
+                if (rnd.Seed == 0)
+                {
+                    for (var k = 0; k < 2; k++)
+                    {
+                        var designs = k == 0 ? _flagDesigns : _repeaterDesigns;
+                        for (var i = 0; i < designs.Length; i++)
+                        {
+                            var colors = new ColorInfo[designs[i].NumColors];
+                            for (var j = 0; j < designs[i].NumColors; j++)
+                            {
+                                var n = (float) (designs[i].NumColors == 1 ? .5 : .8 * j / (designs[i].NumColors - 1) + .1);
+                                colors[j] = new ColorInfo { Color = new Color(n, n, n), Name = "Gray " + n };
+                            }
+                            _lastGeneratedFlags[(k == 1) ? 36 + i : i] = new Flag(designs[i], colors, designs[i].CutoutAllowed);
+                        }
+                    }
+                }
+                else
+                {
+                    var letterNumberFlags = generateFlags(36, _flagDesigns, rnd, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".Select(ch => ch.ToString()).ToArray());
+                    var repeaterFlags = generateFlags(4, _repeaterDesigns, rnd, Enumerable.Range(1, 4).Select(i => "Repeat " + i).ToArray());
+                    _lastGeneratedFlags = letterNumberFlags.Concat(repeaterFlags).ToArray();
+                }
 
-                // Repeater flags
-                flags = generateFlags(4, _repeaterDesigns, rnd, Enumerable.Range(1, 4).Select(i => "Repeat " + i).ToArray());
-                for (int i = 0; i < 4; i++)
-                    _repeaterFlags[i] = flags[i];
+                // Randomize callsigns
+                var names = rnd.ShuffleFisherYates(_allCallsigns.ToArray()).Take(315).OrderBy(x => x).ToArray();
+                var bearings = rnd.ShuffleFisherYates(Enumerable.Range(0, 360).ToArray());
+                _lastGeneratedCallsigns = bearings.Take(315).Select((bearing, ix) => new Callsign { Name = names[ix], Bearing = bearing }).ToArray();
             }
-
-            // Randomize callsigns
-            var names = rnd.ShuffleFisherYates(_allCallsigns.ToArray()).Take(315).OrderBy(x => x).ToArray();
-            var bearings = rnd.ShuffleFisherYates(Enumerable.Range(0, 360).ToArray());
-            callsigns = bearings.Take(315).Select((bearing, ix) => new Callsign { Name = names[ix], Bearing = bearing }).ToArray();
         }
 
-        _callsign = callsigns[Rnd.Range(0, callsigns.Length)];
+        _callsign = _lastGeneratedCallsigns[Rnd.Range(0, _lastGeneratedCallsigns.Length)];
 
         var finalBearing = Rnd.Range(0, 360);
         var flagsOnModule = new List<Sprite>();
         for (int i = 0; i < _callsign.Name.Length; i++)
         {
             var pos = i == 0 ? -1 : _callsign.Name.LastIndexOf(_callsign.Name[i], i - 1);
-            if (pos != -1)
-                flagsOnModule.Add(_repeaterFlags[pos]);
+            if (pos != -1)  // repeater flag
+                flagsOnModule.Add(generateFlagSprite(pos + 36));
             else if (_callsign.Name[i] >= '0' && _callsign.Name[i] <= '9')
-                flagsOnModule.Add(_digitFlags[_callsign.Name[i] - '0']);
+                flagsOnModule.Add(generateFlagSprite(_callsign.Name[i] - '0' + 26));
             else
-                flagsOnModule.Add(_letterFlags[_callsign.Name[i] - 'A']);
+                flagsOnModule.Add(generateFlagSprite(_callsign.Name[i] - 'A'));
         }
 
         _bearingOnModule = (finalBearing - _callsign.Bearing + 360) % 360;
@@ -306,10 +309,10 @@ public class MaritimeFlagsModule : MonoBehaviour
         for (int i = 0; i < bearingOnModuleStr.Length; i++)
         {
             var pos = i == 0 ? -1 : bearingOnModuleStr.LastIndexOf(bearingOnModuleStr[i], i - 1);
-            if (pos != -1)
-                flagsOnModule.Add(_repeaterFlags[pos]);
+            if (pos != -1)  // repeater flag
+                flagsOnModule.Add(generateFlagSprite(pos + 36));
             else
-                flagsOnModule.Add(_digitFlags[bearingOnModuleStr[i] - '0']);
+                flagsOnModule.Add(generateFlagSprite(bearingOnModuleStr[i] - '0' + 26));
         }
 
         _flagsOnModule = flagsOnModule.ToArray();
@@ -336,7 +339,7 @@ public class MaritimeFlagsModule : MonoBehaviour
         Debug.LogFormat(@"[Maritime Flags #{0}] Solution: {1}", _moduleId, _compassDirections[_compassSolution]);
     }
 
-    private List<Sprite> generateFlags(int count, FlagDesign[] designs, MonoRandom rnd, string[] flagNames)
+    private List<Flag> generateFlags(int count, FlagDesign[] designs, MonoRandom rnd, string[] flagNames)
     {
         // Each design can be used different numbers of times
         var designIxsAvailable = new List<int>();
@@ -351,7 +354,7 @@ public class MaritimeFlagsModule : MonoBehaviour
         }
 
         // Assign designs at random
-        var flags = new List<Sprite>();
+        var flags = new List<Flag>();
         var colorCombinations = new Dictionary<int, List<int[]>>();
         var availableColorIxs = Enumerable.Range(0, _colorGroups.Length).ToList();
         for (var i = 0; i < count; i++)
@@ -403,7 +406,7 @@ public class MaritimeFlagsModule : MonoBehaviour
             }
             var cutout = designs[designIx].CutoutAllowed && (rnd.Next(0, 10) == 0);
             Debug.LogFormat(@"<Maritime Flags #{0}> Flag {1} is {2}{3}", _moduleId, flagNames[i], string.Format(designs[designIx].NameFmt, flagColors.Select(cc => (object) cc.Name).ToArray()), cutout ? " with cutout" : "");
-            flags.Add(generateFlag(designs[designIx], flagColors, cutout: cutout));
+            flags.Add(new Flag(designs[designIx], flagColors, cutout: cutout));
         }
         return flags;
     }
